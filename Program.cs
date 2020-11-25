@@ -2,6 +2,7 @@
 using System.IO;
 using System.Text;
 using System.Linq;
+using System.Text.Json;
 
 namespace GCrudForTable
 {
@@ -12,13 +13,15 @@ namespace GCrudForTable
         private static string rutaLocal = Path.GetDirectoryName(System.AppContext.BaseDirectory);
         private static string rutaOutput;
         private static StreamWriter writer;
+        public static string archivoJson;
 
 
         static void Main(string[] args)
         {
-            if (args.Count() > 0)
+            if (args.Count() == 2)
             {
-                rutaOutput = args[0];
+                archivoJson = args[0];
+                rutaOutput = args[1];
             }
 
             CrearDataTabla();
@@ -87,16 +90,32 @@ namespace GCrudForTable
             camposInsert = camposInsert.Remove(camposInsert.ToString().LastIndexOf(","), 1);
 
             StringBuilder camposUpdate = new StringBuilder();
-
             foreach (var item in tabla.Campos)
             {
-                camposUpdate.Append($"{(!item.PK ? (item.Campo + "=@" + item.Campo + ",") : "")}");
+                camposUpdate.Append($" {(!item.PK ? (item.Campo + "=@" + item.Campo + ",") : "")}");
             }
             camposUpdate = camposUpdate.Remove(camposUpdate.ToString().LastIndexOf(","), 1);
+
+            StringBuilder camposValues = new StringBuilder();
+            foreach (var item in tabla.Campos)
+            {
+                camposValues.Append($"{(!item.PK ? "@" + item.Campo + "," : "")}");
+            }
+            camposValues = camposValues.Remove(camposValues.ToString().LastIndexOf(","), 1);
+
+            StringBuilder camposParametro = new StringBuilder();
+            foreach (var item in tabla.Campos)
+            {
+                camposParametro.Append("\n");
+                camposParametro.Append($"    @{item.Campo} {item.TipoDato}{(item.PK ? " = NULL," : ",")}");
+            }
+            camposParametro = camposParametro.Remove(camposParametro.ToString().LastIndexOf(","), 1);
 
             sql = sql.Replace("<tabla>", tabla.Nombre)
                     .Replace("<camposInsert>", camposInsert.ToString())
                     .Replace("<camposUpdate>", camposUpdate.ToString())
+                    .Replace("<camposValues>", camposValues.ToString())
+                    .Replace("<camposParametro>", camposParametro.ToString())
                     .Replace("<tablaUpper>", UppercaseFirst(tabla.Nombre))
                     .Replace("<PK>", campoPK);
 
@@ -117,19 +136,27 @@ namespace GCrudForTable
             writer.WriteLine(sql);
         }
 
+        // private static void GenerateClase()
+        // {
+        //     StreamReader reader = new StreamReader(Path.Combine(rutaLocal, "Templates", "Clase.txt"));
+        //     string sql = reader.ReadToEnd();
+        //     StringBuilder camposTabla = new StringBuilder();
+
+        //     sql = sql.Replace("<tabla>", tabla.Nombre)
+        //             .Replace("<tablaUpper>", UppercaseFirst(tabla.Nombre))
+        //             .Replace("<PK>", campoPK);
+
+        //     writer.WriteLine(sql);
+        // }
+
+
         private static void CrearDataTabla()
         {
-            tabla = new Tabla();
-            tabla.Nombre = "visit";
-            tabla.Campos = new System.Collections.Generic.List<Campos>()
-            {
-                new Campos() { Campo = "visId", PK = true, TipoDato = "INT"},
-                new Campos() { Campo = "usrId", PK = false, TipoDato = "INT"},
-                new Campos() { Campo = "proId", PK = false, TipoDato = "INT"},
-                new Campos() { Campo = "visDate", PK = false, TipoDato = "DATETIME"}
-            };
-        }
+            StreamReader fileJson = new StreamReader(archivoJson);
+            string json = fileJson.ReadToEnd();
 
+            tabla = System.Text.Json.JsonSerializer.Deserialize<Tabla>(json);
+        }
 
         static string UppercaseFirst(string s)
         {

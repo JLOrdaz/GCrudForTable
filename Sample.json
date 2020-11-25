@@ -1,0 +1,10 @@
+{ 
+    "Nombre": "visit",
+    "Campos" :
+    [
+        {"Campo":"visId", "TipoDato":"INT", "PK":true},
+        {"Campo":"usrId", "TipoDato":"INT", "PK":false},
+        {"Campo":"porId", "TipoDato":"INT", "PK":false},
+        {"Campo":"visDate", "TipoDato":"DATETIME", "PK":false}
+    ] 
+}
