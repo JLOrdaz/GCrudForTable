@@ -1,10 +1,9 @@
 { 
-    "Nombre": "visit",
+    "Nombre": "practica",
     "Campos" :
     [
-        {"Campo":"visId", "TipoDato":"INT", "PK":true},
-        {"Campo":"usrId", "TipoDato":"INT", "PK":false},
-        {"Campo":"porId", "TipoDato":"INT", "PK":false},
-        {"Campo":"visDate", "TipoDato":"DATETIME", "PK":false}
+        {"Campo":"praId", "TipoDato":"INT", "PK":true},
+        {"Campo":"praNombre", "TipoDato":"VARCHAR(256)", "PK":false},
+        {"Campo":"praActivo", "TipoDato":"BIT", "PK":false}
     ] 
 }

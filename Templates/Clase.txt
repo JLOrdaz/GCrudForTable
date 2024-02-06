@@ -1,8 +1,4 @@
-using System;
-
-namespace sunamespace
+public class <tabla>
 {
-    public class <tabla>
-    {<camposClase>
-    }
+<camposClase>
 }

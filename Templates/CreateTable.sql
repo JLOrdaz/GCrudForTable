@@ -1,5 +1,6 @@
 CREATE TABLE [dbo].[<tabla>]
-(<camposTabla>
+(
+<camposTabla>
 )
 GO
 
