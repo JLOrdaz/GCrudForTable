@@ -15,7 +15,7 @@ if (args.Count() == 2)
 CrearDataTabla();
 
 writer = new StreamWriter(Path.Combine(rutaOutput, $"{tabla.Nombre}_CreateCRUD.sql"));
-//GenerateTable();
+GenerateTable();
 GenerateQuery();
 GenerateDelete();
 GenerateSave();
@@ -31,25 +31,25 @@ writer.Close();
 Console.WriteLine("Listo.");
 
 
-// void GenerateTable()
-// {
-//     Console.WriteLine("Creating table...");
-//     StreamReader reader = new StreamReader(Path.Combine(rutaLocal, "Templates", "CreateTable.sql"));
-//     string sql = reader.ReadToEnd();
-//     StringBuilder camposTabla = new StringBuilder();
-//     //<campostabla>
-//     foreach (var item in tabla.Campos)
-//     {
-//         camposTabla.Append("\n");
-//         camposTabla.Append($"    {item.Campo} {item.TipoDato} {(item.PK ? $"CONSTRAINT PK_{tabla.Nombre} PRIMARY KEY IDENTITY" : "NULL")},");
-//     }
-//     camposTabla = camposTabla.Remove(camposTabla.ToString().LastIndexOf(","), 1);
+void GenerateTable()
+{
+    Console.WriteLine("Creating table...");
+    StreamReader reader = new StreamReader(Path.Combine(rutaLocal, "Templates", "CreateTable.sql"));
+    string sql = reader.ReadToEnd();
+    StringBuilder camposTabla = new StringBuilder();
+    //<campostabla>
+    foreach (var item in tabla.Campos)
+    {
+        camposTabla.Append("\n");
+        camposTabla.Append($"    {item.Campo} {item.TipoDato} {(item.PK ? $"CONSTRAINT PK_{tabla.Nombre} PRIMARY KEY IDENTITY" : "NULL")},");
+    }
+    camposTabla = camposTabla.Remove(camposTabla.ToString().LastIndexOf(","), 1);
 
-//     //replace tags
-//     sql = sql.Replace("<tabla>", tabla.Nombre)
-//     .Replace("<camposTabla>", camposTabla.ToString());
-//     writer.WriteLine(sql);
-// }
+    //replace tags
+    sql = sql.Replace("<tabla>", tabla.Nombre)
+    .Replace("<camposTabla>", camposTabla.ToString());
+    writer.WriteLine(sql);
+}
 
 void GenerateQuery()
 {

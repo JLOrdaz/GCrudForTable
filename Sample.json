@@ -1,9 +1,11 @@
 { 
-    "Nombre": "practica",
+    "Nombre": "nota",
     "Campos" :
     [
-        {"Campo":"praId", "TipoDato":"INT", "PK":true},
-        {"Campo":"praNombre", "TipoDato":"VARCHAR(256)", "PK":false},
-        {"Campo":"praActivo", "TipoDato":"BIT", "PK":false}
+        {"Campo":"notId", "TipoDato":"INT", "PK":true},
+        {"Campo":"notDescripcion", "TipoDato":"VARCHAR(MAX)", "PK":false},
+        {"Campo":"notFecha", "TipoDato":"datetime2", "PK":false},
+        {"Campo":"empId", "TipoDato":"int", "PK":false},
+        {"Campo":"casId", "TipoDato":"int", "PK":false}
     ] 
 }
